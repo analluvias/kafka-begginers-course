@@ -34,7 +34,7 @@ public class ProducerDemoWithCallBack {
             //criando o valor que eu quero enviar para o meu tópico "demo_java"
 
             ProducerRecord<String, String> producerRecord =
-                    new ProducerRecord<>("demo_java", "hello world" + i);
+                    new ProducerRecord<>("demo_j1", "hello world" + i);
 
             //enviando dados - operação assincrona
 

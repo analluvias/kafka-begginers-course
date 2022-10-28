@@ -32,7 +32,7 @@ public class ProducerDemo {
         //criando o valor que eu quero enviar para o meu tópico "demo_java"
 
         ProducerRecord<String, String> producerRecord =
-                new ProducerRecord<>("demo_java", "hello world");
+                new ProducerRecord<>( "demo_j1", "hello world");
 
         //enviando dados - operação assincrona
 
