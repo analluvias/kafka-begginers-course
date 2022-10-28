@@ -1,9 +1,6 @@
 package io.example.demo.kafka;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
@@ -22,7 +19,7 @@ public class ConsumerDemoWithShutdown {
         log.info("I am a kafka consumer");
 
         String bootstrapServers = "127.0.0.1:9092";
-        String groupId = "my-third-application";
+        String groupId = "my-third-application"; //ID DO GRUPO DE CONSUMERS
         String topic = "demo_j1";
 
         //create consumer configs
@@ -32,6 +29,8 @@ public class ConsumerDemoWithShutdown {
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); //pode ser none/ earliest / latest -> none - não ler/ earliest - ler do começo do topico / latest - ler so a partir de agora
+        properties.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, CooperativeStickyAssignor.class.getName()); //esse atributo serve para settar o modo de organização a cada vez que entra ou sai um consumer novo
+        //essa configuração CooperativeStickyAssignor é uma das MELHORES, estudar melhor as opções
 
         //create consumer
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
@@ -70,7 +69,6 @@ public class ConsumerDemoWithShutdown {
 
             //captação de novos dados
             while (true){
-                log.info("Polling");
                 //-> vá ao kafka e capture o dado agora, se não vier, espere 1000milisegundos
                 //se não vier novamente, então teremos uma coleção vazia
                 ConsumerRecords<String, String> records =
